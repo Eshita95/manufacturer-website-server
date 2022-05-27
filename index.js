@@ -59,9 +59,9 @@ async function run() {
             res.send(result);
         })
         //add review 
-        app.get('/getReview', verifyJWT, async (req, res) => {
+        app.get('/getReview', async (req, res) => {
             const getReview = await userReview.find().toArray();
-            res.send(getReview)
+            res.send(getReview);
         })
         app.post('/addReview', async (req, res) => {
             const addReview = req.body;
@@ -73,20 +73,41 @@ async function run() {
         app.get('/user', async (req, res) => {
             const totalUser = await userCollection.find().toArray();
             res.send(totalUser)
-          })
+        })
+
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
             const user = req.body;
             const filter = { email: email };
-            const options = { upsert: true };
+            const option = { upsert: true };
             const updateDoc = {
                 $set: user,
             }
-            const result = await userCollection.updateOne(filter, updateDoc, options);
+            const result = await userCollection.updateOne(filter, updateDoc, option);
+
+
 
             //token insert
             const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
             res.send({ result, token });
+        })
+
+        app.put('/user/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const filter = { email: email };
+            const updateDoc = {
+                $set: { role: 'admin' },
+            }
+            const result = await userCollection.updateOne(filter, updateDoc);
+            res.send(result);
+
+        })
+
+        app.get('/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = await userCollection.findOne({ email: email });
+            const isAdmin = user.role === 'admin';
+            res.send({ admin: isAdmin });
         })
 
 
