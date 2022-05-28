@@ -110,6 +110,20 @@ async function run() {
 
         })
 
+        // profile update database
+        app.put('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const updateUser = req.body;
+            const filter = { email: email };
+            const option = { upsert: true };
+            const updateDoc = {
+                $set: updateUser,
+            }
+            const result = await userCollection.updateOne(filter, updateDoc, option);
+            res.send(result);
+
+        })
+
     }
     finally {
 
