@@ -44,7 +44,7 @@ async function run() {
             const toolsPart = await partsCollection.find().toArray();
             res.send(toolsPart)
         })
-        //tools and parts id 
+        //tools and parts 
         app.get('/getParts/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
