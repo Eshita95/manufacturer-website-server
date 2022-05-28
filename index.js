@@ -69,7 +69,7 @@ async function run() {
             res.send(result);
         })
 
-        // user create
+        // user create database
         app.get('/user', async (req, res) => {
             const totalUser = await userCollection.find().toArray();
             res.send(totalUser)
