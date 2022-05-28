@@ -87,7 +87,7 @@ async function run() {
 
 
 
-            //token insert
+            //token insert in database
             const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
             res.send({ result, token });
         })
